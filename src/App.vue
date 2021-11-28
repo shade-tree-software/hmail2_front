@@ -1,16 +1,27 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <button type="button" @click="onGetNoteClicked">Get Note</button>
+  <p>Your note is: {{ note }}</p>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import { ref } from 'vue'
+import axios from 'axios'
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
-  }
+  },
+  setup() {
+    const note = ref('')
+    
+    const onGetNoteClicked = () => {
+      axios.get('http://localhost:8000/api/notes/').then((response) => {
+	note.value = response.data[0].content
+      })
+    }
+
+    return { note, onGetNoteClicked }
+  },
 }
 </script>
 
